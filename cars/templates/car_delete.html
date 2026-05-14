@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Deletar {{ object.brand }} {{ object.model }} — AutoLux{% endblock %}
+
+{% block content %}
+  <style>
+    .confirm-shell {
+      max-width: 520px;
+      margin: 60px auto 0;
+      text-align: center;
+    }
+    .warn-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      background: rgba(255, 77, 94, 0.12);
+      border: 1px solid rgba(255, 77, 94, 0.3);
+      display: grid; place-items: center;
+      color: var(--danger);
+      font-size: 32px;
+      font-weight: 700;
+      box-shadow: 0 0 30px rgba(255, 77, 94, 0.15);
+    }
+    .confirm-shell h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .confirm-shell p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .confirm-shell p strong {
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+    }
+    .confirm-card {
+      margin-top: 28px;
+      padding: 32px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+    .actions {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 13px 26px;
+      font-size: 14px; font-weight: 600;
+      font-family: inherit;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none !important;
+    }
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+      box-shadow: 0 0 24px rgba(255, 77, 94, 0.35);
+    }
+    .btn-danger:hover { background: #ff6271; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; border-color: var(--border-strong); color: var(--text); }
+    .btn-ghost:hover { background: rgba(255, 255, 255, 0.05); }
+  </style>
+
+  <div class="confirm-shell">
+    <div class="warn-icon">!</div>
+    <h1>Deletar carro</h1>
+    <p>Esta ação é permanente e não pode ser desfeita.</p>
+
+    <div class="confirm-card">
+      <p>Você tem certeza que deseja deletar</p>
+      <p style="margin-top: 8px;"><strong>{{ object.brand }} {{ object.model }}</strong> ?</p>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="actions">
+          <button type="submit" class="btn btn-danger">Sim, deletar carro</button>
+          <a href="{% url 'car_update' pk=object.pk %}" class="btn btn-ghost">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

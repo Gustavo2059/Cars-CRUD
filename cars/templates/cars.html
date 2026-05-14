@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo — AutoLux{% endblock %}
+
+{% block content %}
+  <style>
+    .page-head {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .page-head .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .page-head h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.05;
+    }
+    .page-head h1 span {
+      background: linear-gradient(135deg, var(--accent), #7ce4ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .page-head p {
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin: 0 0 36px;
+      padding: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      backdrop-filter: blur(12px);
+      max-width: 560px;
+    }
+    .search-bar input[type="text"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      padding: 12px 18px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .search-bar input::placeholder { color: var(--text-muted); }
+    .search-bar button {
+      background: var(--accent);
+      color: #0a0e14;
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      box-shadow: var(--accent-glow);
+    }
+    .search-bar button:hover { background: #fff; transform: translateY(-1px); }
+
+    .car-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .car-card {
+      position: relative;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .car-card::after {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: var(--radius);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+    }
+    .car-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 212, 255, 0.2);
+    }
+    .car-card a.card-link {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      color: inherit;
+    }
+
+    .car-image-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a2030, #0d1118);
+    }
+    .car-image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .car-card:hover .car-image-wrap img { transform: scale(1.06); }
+
+    .no-photo {
+      width: 100%; height: 100%;
+      display: grid; place-items: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .year-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: rgba(10, 14, 20, 0.75);
+      backdrop-filter: blur(8px);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+    }
+
+    .car-body { padding: 20px 22px 22px; }
+    .car-brand {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .car-model {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .car-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .car-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .car-price small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .car-plate {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+    }
+    .empty-state h3 {
+      color: var(--text);
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 1024px) {
+      .car-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .car-grid { grid-template-columns: 1fr; }
+      .search-bar { flex-direction: column; border-radius: var(--radius); }
+      .search-bar button { border-radius: 10px; }
+    }
+  </style>
+
+  <div class="page-head">
+    <span class="eyebrow">Catálogo · Coleção 2026</span>
+    <h1>Encontre seu próximo <span>carro dos sonhos</span></h1>
+    <p>Veículos selecionados, garantia de procedência e atendimento exclusivo. Explore nossa coleção e agende uma visita.</p>
+  </div>
+
+  <form method="GET" action="{% url 'cars_list' %}" class="search-bar">
+    <input type="text" name="search" placeholder="Buscar por marca, modelo ou ano…">
+    <button type="submit">Buscar</button>
+  </form>
+
+  <div class="car-grid">
+    {% if cars %}
+      {% for car in cars %}
+        <article class="car-card">
+          <a href="{% url 'car_detail' pk=car.pk %}" class="card-link">
+            <div class="car-image-wrap">
+              {% if car.photo %}
+                <img src="{{ car.photo.url }}" alt="{{ car.brand }} {{ car.model }}">
+              {% else %}
+                <div class="no-photo">Sem foto</div>
+              {% endif %}
+              <span class="year-badge">{{ car.model_year }}</span>
+            </div>
+            <div class="car-body">
+              <div class="car-brand">{{ car.brand }}</div>
+              <h3 class="car-model">{{ car.model }}</h3>
+              <div class="car-meta">
+                <div class="car-price">
+                  <small>A partir de</small>
+                  R$ {{ car.value }}
+                </div>
+                <span class="car-plate">{{ car.plate }}</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <h3>Nenhum carro encontrado</h3>
+        <p>Tente ajustar sua busca ou volte mais tarde — novos veículos chegam toda semana.</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
