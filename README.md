@@ -8,6 +8,39 @@ O **Cars** é uma aplicação simples de gerenciamento de veículos, criada com 
 
 O sistema também possui controle de acesso: usuários não autenticados conseguem visualizar os carros cadastrados, enquanto ações como cadastrar, editar e excluir exigem login.
 
+
+## Demonstração visual
+
+### Catálogo de veículos
+
+Tela principal com listagem dos veículos cadastrados, campo de busca e cards com informações resumidas.
+
+<img src="assets/readme/catalog.png" alt="Tela de catálogo de veículos do sistema AutoLux" width="100%">
+
+### Detalhes do veículo
+
+Página de visualização detalhada com foto, marca, modelo, valor, placa, ano de fabricação, ano do modelo e descrição do veículo.
+
+<img src="assets/readme/car-detail.png" alt="Tela de detalhes de veículo do sistema AutoLux" width="100%">
+
+### Cadastro de veículo
+
+Formulário para cadastro de novos veículos, incluindo modelo, marca, ano de fabricação, ano do modelo, placa, valor e foto.
+
+<img src="assets/readme/new-car.png" alt="Tela de cadastro de veículo do sistema AutoLux" width="100%">
+
+### Confirmação de exclusão
+
+Tela de confirmação para exclusão de veículo, reforçando que a ação é permanente.
+
+<img src="assets/readme/delete-car.png" alt="Tela de confirmação de exclusão de veículo do sistema AutoLux" width="100%">
+
+### Login
+
+Tela de autenticação para acesso ao painel e às funcionalidades protegidas do sistema.
+
+<img src="assets/readme/login.png" alt="Tela de login do sistema AutoLux" width="100%">
+
 ## Funcionalidades
 
 - Listagem de carros cadastrados.
